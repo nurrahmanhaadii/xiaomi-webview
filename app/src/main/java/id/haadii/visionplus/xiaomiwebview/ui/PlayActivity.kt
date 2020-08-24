@@ -1,17 +1,17 @@
 package id.haadii.visionplus.xiaomiwebview.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
-import android.webkit.PermissionRequest
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import id.haadii.visionplus.xiaomiwebview.R
 import id.haadii.visionplus.xiaomiwebview.model.XiaomiResponse
 import kotlinx.android.synthetic.main.activity_play.*
+
 
 class PlayActivity : AppCompatActivity(), PlayContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +45,10 @@ class PlayActivity : AppCompatActivity(), PlayContract.View {
             }
             webViewClient = MyWebClient()
             webChromeClient = MyWebChromeClient()
+            addJavascriptInterface(JavaScriptInterface(), "myjava")
             loadUrl(url)
+//            loadUrl("javascript:myjava.returnValue(getTest)")
+//            loadUrl("javascript:alert(getTest)")
         }
     }
 
@@ -53,14 +56,25 @@ class PlayActivity : AppCompatActivity(), PlayContract.View {
         override fun onPageFinished(view: WebView?, url: String?) {
             super.onPageFinished(view, url)
             progressBar?.visibility = View.GONE
+            webview.evaluateJavascript("javascript:getCek();", object: ValueCallback<String> {
+                override fun onReceiveValue(value: String?) {
+                    Log.e("JSBridge", "test:" + value.toString())
+                }
+            })
         }
     }
 
     inner class MyWebChromeClient : WebChromeClient() {
         override fun onProgressChanged(view: WebView?, newProgress: Int) {
             super.onProgressChanged(view, newProgress)
-            if (newProgress == 100)
+            if (newProgress == 100) {
                 progressBar?.visibility = View.GONE
+                webview.evaluateJavascript("javascript:getCek();", object: ValueCallback<String> {
+                    override fun onReceiveValue(value: String?) {
+                        Log.e("JSBridge", "check:" + value.toString())
+                    }
+                })
+            }
             else
                 progressBar?.visibility = View.VISIBLE
         }
@@ -69,6 +83,24 @@ class PlayActivity : AppCompatActivity(), PlayContract.View {
             Handler().post {
                 request?.grant(arrayOf(PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID))
             }
+        }
+
+        override fun onJsAlert(
+            view: WebView?,
+            url: String?,
+            message: String?,
+            result: JsResult?
+        ): Boolean {
+            Log.e("jsAlert", message)
+            result?.confirm()
+            return true
+        }
+    }
+
+    inner class JavaScriptInterface {
+        @JavascriptInterface
+        fun returnValue() {
+            Log.e("JSBridge", "check:")
         }
     }
 

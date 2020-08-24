@@ -16,9 +16,9 @@ class MainActivity : AppCompatActivity() {
             val headerOne = etHeaderOne?.text.toString()
             val headerTwo = etHeaderTwo?.text.toString()
             val intent = Intent(this, PlayActivity::class.java)
-            intent.putExtra("url", url)
-            intent.putExtra("headerOne", headerOne)
-            intent.putExtra("headerTwo", headerTwo)
+            intent.putExtra("url", "https://partners-api.visionplus.id/api/v1/partnership/xiaomi/all?page_no=1&page_size=20")
+            intent.putExtra("headerOne", "PZ8ObMKnq_GeFWSO_ec9el9-ybBkzCQy7snJpazDNKE")
+            intent.putExtra("headerTwo", "eOAIIXS5dMFNdB_7hpsoFwMVakBcA6tP9EPLw0O-DB4")
             startActivity(intent)
         }
     }

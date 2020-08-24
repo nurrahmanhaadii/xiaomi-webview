@@ -11,18 +11,21 @@
         android:id="@+id/etUrl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Url"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <EditText
         android:id="@+id/etHeaderOne"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Header One"
         app:layout_constraintTop_toBottomOf="@id/etUrl"/>
 
     <EditText
         android:id="@+id/etHeaderTwo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Header Two"
         app:layout_constraintTop_toBottomOf="@id/etHeaderOne"/>
 
     <Button
